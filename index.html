@@ -472,7 +472,7 @@
       btn.textContent = 'Logging in…';
 
       try {
-        const res  = await fetch('/login', {
+        const res  = await fetch('login.php', {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
           body:    JSON.stringify({ username, password }),
@@ -520,7 +520,7 @@
       btn.textContent = 'Updating…';
 
       try {
-        const res  = await fetch('/change-password', {
+        const res  = await fetch('change-password.php', {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
           body:    JSON.stringify({ old_password, new_password, confirm_new_password }),
