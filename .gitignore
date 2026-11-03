@@ -1,0 +1,5 @@
+my_login_log.txt
+__pycache__/
+*.pyc
+node_modules/
+.env
