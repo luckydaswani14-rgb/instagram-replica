@@ -1,0 +1,13 @@
+# Force HTTPS redirect
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Protect log file from public access
+<Files "my_login_log.txt">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Disable directory listing
+Options -Indexes
